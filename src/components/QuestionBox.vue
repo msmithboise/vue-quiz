@@ -9,16 +9,8 @@
         <b-list-group-item
           v-for="(answer, index) in answers"
           :key="index"
-          @click="selectAnswer(index)"
-          :class="[
-            !answered && selectedIndex === index
-              ? 'selected'
-              : answered && correctIndex === index
-              ? 'correct'
-              : answered && selectedIndex === index && correctIndex !== index
-              ? 'incorrect'
-              : '',
-          ]"
+          @click.prevent="selectAnswer(index)"
+          :class="answerClass(index)"
           >{{ answer }}</b-list-group-item
         >
       </b-list-group>
@@ -92,6 +84,23 @@ export default {
       this.correctIndex = this.shuffledAnswers.indexOf(
         this.currentQuestion.correct_answer
       );
+    },
+    answerClass(index) {
+      let answerClass = "";
+
+      if (!this.answered && this.selectedIndex === index) {
+        answerClass = "selected";
+      } else if (this.answered && this.correctIndex === index) {
+        answerClass = "correct";
+      } else if (
+        this.answered &&
+        this.selectedIndex === index &&
+        this.correctIndex !== index
+      ) {
+        answerClass = "incorrect";
+      }
+
+      return answerClass;
     },
   },
 };
